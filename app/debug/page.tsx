@@ -36,10 +36,19 @@ export default function DebugPage() {
         const { data, error } = await supabase.from("profiles").select("count").limit(1);
         
         if (error) {
-          setChecks((prev) => ({
-            ...prev,
-            connection: `Erro: ${error.message}`,
-          }));
+          // Verificar se o erro é HTML (indica URL errada)
+          const errorMsg = error.message || "";
+          if (errorMsg.includes("<!DOCTYPE") || errorMsg.includes("<html")) {
+            setChecks((prev) => ({
+              ...prev,
+              connection: `❌ URL INCORRETA: A URL do Supabase está apontando para o site errado. Verifique se a URL no Vercel está correta (deve terminar com .supabase.co)`,
+            }));
+          } else {
+            setChecks((prev) => ({
+              ...prev,
+              connection: `Erro: ${errorMsg.substring(0, 100)}`,
+            }));
+          }
         } else {
           setChecks((prev) => ({
             ...prev,
@@ -48,10 +57,18 @@ export default function DebugPage() {
         }
       } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : "Erro desconhecido";
-        setChecks((prev) => ({
-          ...prev,
-          connection: `❌ Erro de conexão: ${errorMessage}`,
-        }));
+        // Verificar se é HTML
+        if (typeof errorMessage === "string" && (errorMessage.includes("<!DOCTYPE") || errorMessage.includes("<html"))) {
+          setChecks((prev) => ({
+            ...prev,
+            connection: `❌ URL INCORRETA: A resposta é HTML ao invés de JSON. A URL do Supabase está errada no Vercel.`,
+          }));
+        } else {
+          setChecks((prev) => ({
+            ...prev,
+            connection: `❌ Erro de conexão: ${errorMessage.substring(0, 100)}`,
+          }));
+        }
       }
 
       // Testar autenticação
@@ -129,14 +146,38 @@ export default function DebugPage() {
             <h3 className="font-semibold mb-2">Informações (parciais):</h3>
             <div className="space-y-2 text-sm">
               <div>
-                <strong>URL:</strong> {url ? `${url.substring(0, 30)}...` : "Não configurada"}
+                <strong>URL completa:</strong>{" "}
+                <code className="bg-white px-2 py-1 rounded text-xs break-all">
+                  {url || "Não configurada"}
+                </code>
               </div>
               <div>
-                <strong>Key (primeiros caracteres):</strong>{" "}
-                {key ? `${key.substring(0, 20)}...` : "Não configurada"}
+                <strong>URL começa com https://:</strong>{" "}
+                {url ? (url.startsWith("https://") ? "✅ Sim" : "❌ Não") : "N/A"}
+              </div>
+              <div>
+                <strong>URL contém 'supabase.co':</strong>{" "}
+                {url ? (url.includes("supabase.co") ? "✅ Sim" : "❌ Não - PROBLEMA!") : "N/A"}
+              </div>
+              <div>
+                <strong>Key configurada:</strong>{" "}
+                {key ? `✅ Sim (${key.length} caracteres)` : "❌ Não"}
               </div>
             </div>
           </div>
+
+          {url && !url.includes("supabase.co") && (
+            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded">
+              <h3 className="font-semibold text-red-800 mb-2">⚠️ PROBLEMA DETECTADO:</h3>
+              <p className="text-sm text-red-700">
+                A URL do Supabase não contém "supabase.co". Isso indica que a URL está incorreta.
+                A URL deve ser algo como: <code>https://xxxxx.supabase.co</code>
+              </p>
+              <p className="text-sm text-red-700 mt-2">
+                <strong>URL atual:</strong> <code>{url}</code>
+              </p>
+            </div>
+          )}
 
           <div className="mt-6 p-4 bg-yellow-50 rounded">
             <h3 className="font-semibold mb-2">Como corrigir:</h3>

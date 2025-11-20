@@ -1,0 +1,132 @@
+# Regras do Cursor AI para Recipe Sharing Platform
+
+## Contexto do Projeto
+Este é um projeto Next.js 16 com TypeScript, Supabase e Tailwind CSS para uma plataforma de compartilhamento de receitas.
+
+## Stack Tecnológica
+- **Framework**: Next.js 16.0.3 (App Router)
+- **Linguagem**: TypeScript 5
+- **Banco de Dados**: Supabase (PostgreSQL)
+- **Estilização**: Tailwind CSS 4
+- **Autenticação**: Supabase Auth
+- **Deploy**: Vercel
+
+## Estrutura do Projeto
+- `/app` - Rotas do Next.js App Router
+- `/components` - Componentes React reutilizáveis
+- `/lib` - Funções utilitárias e configurações
+- `/hooks` - Custom React hooks
+- `/types` - Definições de tipos TypeScript
+- `/supabase` - Scripts SQL e configurações do banco
+
+## Convenções de Código
+
+### TypeScript
+- Sempre usar tipos explícitos, evitar `any`
+- Usar tipos do Supabase de `@/types/database`
+- Preferir `unknown` ao invés de `any` em catch blocks
+- Usar type guards quando necessário
+
+### React Components
+- Usar `"use client"` apenas quando necessário (hooks, eventos, etc)
+- Server Components por padrão
+- Componentes devem ter export default ou named export consistente
+- Props devem ser tipadas com interfaces ou types
+
+### Supabase
+- Cliente cliente: `lib/supabaseClient.ts` (para client-side)
+- Cliente servidor: `lib/supabase-server.ts` (para server-side)
+- Sempre verificar variáveis de ambiente antes de usar
+- Tratar erros adequadamente com mensagens claras
+
+### Estilização
+- Usar Tailwind CSS classes
+- Seguir design system existente (cores, espaçamentos)
+- Componentes devem ser responsivos
+
+### Autenticação
+- Usar `useAuth` hook para estado de autenticação
+- Proteger rotas com `ProtectedRoute` component
+- Sempre validar autenticação antes de operações sensíveis
+
+### Tratamento de Erros
+- Sempre capturar e tratar erros adequadamente
+- Mostrar mensagens de erro claras para o usuário
+- Logar erros no console para debug (não em produção)
+- Usar try/catch em operações assíncronas
+
+### Performance
+- Usar Server Components quando possível
+- Evitar re-renders desnecessários
+- Otimizar queries do Supabase (usar select específico, limit, etc)
+
+## Padrões de Arquivos
+
+### Páginas (`app/*/page.tsx`)
+- Server Components quando possível
+- Client Components apenas se necessário
+- Usar `ProtectedRoute` para páginas privadas
+
+### Componentes (`components/*.tsx`)
+- Sempre usar `"use client"` se usar hooks
+- Props tipadas
+- Export default
+
+### Lib Functions (`lib/*.ts`)
+- Funções assíncronas devem retornar `{ data, error }`
+- Validar inputs
+- Tratar erros adequadamente
+
+## Variáveis de Ambiente
+- `NEXT_PUBLIC_SUPABASE_URL` - URL do projeto Supabase
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Chave pública anônima do Supabase
+- Sempre verificar se estão configuradas antes de usar
+
+## Deploy
+- Projeto configurado para Vercel
+- Build deve passar sem erros
+- Variáveis de ambiente devem estar configuradas no Vercel
+- Não usar código que quebra o build
+
+## Comandos Importantes
+- `npm run dev` - Desenvolvimento local
+- `npm run build` - Build de produção
+- `npm run lint` - Verificar código
+
+## Regras Específicas
+1. **Nunca** usar `any` sem necessidade - preferir tipos explícitos
+2. **Sempre** validar variáveis de ambiente em produção
+3. **Sempre** tratar erros de forma adequada
+4. **Sempre** usar tipos do Supabase quando disponíveis
+5. **Sempre** verificar se o build passa antes de commitar
+6. **Nunca** expor chaves secretas no client-side
+7. **Sempre** usar `NEXT_PUBLIC_` prefix para variáveis client-side
+8. **Sempre** seguir padrões de código existentes no projeto
+
+## Quando Criar Novos Arquivos
+- Criar componentes reutilizáveis em `/components`
+- Criar hooks customizados em `/hooks`
+- Criar funções utilitárias em `/lib`
+- Criar páginas em `/app` seguindo estrutura de rotas
+
+## Quando Modificar Arquivos Existentes
+- Manter consistência com padrões existentes
+- Não quebrar funcionalidades existentes
+- Adicionar comentários quando necessário
+- Atualizar tipos se necessário
+
+
+
+
+
+
+## Processo de Trabalho (Workflow)
+
+Quando receber uma tarefa ou solicitação:
+
+1. **Planejamento**: Primeiro, pense sobre o problema, leia os arquivos relevantes do código e escreva um plano em `tasks/todo.md`
+2. **Lista de Tarefas**: O plano deve ter uma lista de itens de tarefa que podem ser marcados conforme você os completa
+3. **Validação**: Antes de começar a trabalhar, verifique comigo e eu validarei o plano
+4. **Execução**: Então, comece a trabalhar nos itens da lista de tarefas, marcando-os como concluídos conforme avança
+5. **Explicação**: A cada passo, forneça uma explicação de alto nível das mudanças que você fez
+6. **Simplicidade**: Faça cada tarefa e mudança de código o mais simples possível. Evite fazer mudanças massivas ou complexas. Cada mudança deve impactar o mínimo de código possível. Tudo é sobre simplicidade.

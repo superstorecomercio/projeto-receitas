@@ -39,87 +39,110 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <Link href="/" className="flex justify-center">
-            <span className="text-3xl font-bold text-black">CookShare</span>
-          </Link>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Entre na sua conta
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Ou{" "}
-            <Link
-              href="/signup"
-              className="font-medium text-black hover:underline"
-            >
-              crie uma nova conta
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 via-white to-purple-50 px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+          <div className="text-center mb-8">
+            <Link href="/" className="inline-flex items-center space-x-2 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg">
+                <span className="text-2xl">🍳</span>
+              </div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+                CookShare
+              </span>
             </Link>
-          </p>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <p className="text-sm text-red-800">{error}</p>
-            </div>
-          )}
-          <div className="space-y-4 rounded-md shadow-sm">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="relative block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-none focus:ring-black"
-                placeholder="Email"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Senha
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="relative block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-none focus:ring-black"
-                placeholder="Senha"
-              />
-            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              Entre na sua conta
+            </h2>
+            <p className="text-gray-600">
+              Ou{" "}
+              <Link
+                href="/signup"
+                className="font-semibold text-orange-600 hover:text-orange-700 transition-colors"
+              >
+                crie uma nova conta
+              </Link>
+            </p>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="text-sm">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {error && (
+              <div className="rounded-xl bg-red-50 border border-red-200 p-4">
+                <p className="text-sm text-red-800 font-medium">{error}</p>
+              </div>
+            )}
+
+            <div className="space-y-5">
+              <div>
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Email
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-gray-400">📧</span>
+                  </div>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    placeholder="seu@email.com"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Senha
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span className="text-gray-400">🔒</span>
+                  </div>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
               <Link
                 href="/forgot-password"
-                className="font-medium text-black hover:underline"
+                className="text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors"
               >
                 Esqueceu sua senha?
               </Link>
             </div>
-          </div>
 
-          <div>
             <button
               type="submit"
               disabled={loading}
-              className="group relative flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full flex justify-center items-center rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3 text-base font-semibold text-white shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02]"
             >
-              {loading ? "Entrando..." : "Entrar"}
+              {loading ? (
+                <span className="flex items-center">
+                  <span className="animate-spin mr-2">⏳</span>
+                  Entrando...
+                </span>
+              ) : (
+                "Entrar"
+              )}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
