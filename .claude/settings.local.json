@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git commit -m \"$(cat <<''EOF''\nImplementação inicial do CookShare - Plataforma de compartilhamento de receitas\n\nFuncionalidades implementadas:\n- Sistema de autenticação completo (login, signup, logout, recuperação de senha)\n- Dashboard com listagem de todas as receitas\n- Busca e filtros por categoria e dificuldade\n- CRUD completo de receitas (criar, editar, deletar)\n- Sistema de perfis com nome completo e biografia\n- Páginas de recuperação de senha (forgot-password e reset-password)\n- Proteção de rotas com ProtectedRoute\n- Integração completa com Supabase (auth e database)\n- RLS policies para segurança dos dados\n- Interface responsiva com Tailwind CSS\n\nStack:\n- Next.js 15 com App Router\n- TypeScript\n- Supabase (Auth + PostgreSQL)\n- Tailwind CSS\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
