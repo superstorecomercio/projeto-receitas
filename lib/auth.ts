@@ -8,53 +8,85 @@ type ProfileInsert = Database['public']['Tables']['profiles']['Insert'];
  * Cria um novo usuário e seu profile
  */
 export async function signUp(email: string, password: string, username: string, fullname?: string) {
-  // Criar usuário no Supabase Auth
-  const { data: authData, error: authError } = await supabase.auth.signUp({
-    email,
-    password,
-  });
-
-  if (authError) {
-    return { data: null, error: authError };
+  // Verificar se as variáveis de ambiente estão configuradas
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return { 
+      data: null, 
+      error: new Error('Supabase não está configurado. Verifique as variáveis de ambiente NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY no Vercel.') 
+    };
   }
 
-  if (!authData.user) {
-    return { data: null, error: new Error('Usuário não foi criado') };
+  try {
+    // Criar usuário no Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (authError) {
+      return { data: null, error: authError };
+    }
+
+    if (!authData?.user) {
+      return { data: null, error: new Error('Usuário não foi criado') };
+    }
+
+    // Criar profile na tabela profiles
+    const profileData: ProfileInsert = {
+      id: authData.user.id,
+      username,
+      fullname: fullname || null,
+    };
+
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      // @ts-expect-error - Supabase type issue
+      .insert([profileData])
+      .select()
+      .single();
+
+    if (profileError) {
+      // Se falhar ao criar profile, o usuário ainda foi criado no auth
+      // Você pode querer deletar o usuário do auth aqui se necessário
+      return { data: null, error: profileError };
+    }
+
+    return { data: { user: authData.user, profile }, error: null };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido ao criar usuário';
+    return { 
+      data: null, 
+      error: new Error(`Erro de conexão: ${errorMessage}. Verifique se as variáveis de ambiente do Supabase estão configuradas corretamente no Vercel.`) 
+    };
   }
-
-  // Criar profile na tabela profiles
-  const profileData: ProfileInsert = {
-    id: authData.user.id,
-    username,
-    fullname: fullname || null,
-  };
-
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    // @ts-expect-error - Supabase type issue
-    .insert([profileData])
-    .select()
-    .single();
-
-  if (profileError) {
-    // Se falhar ao criar profile, o usuário ainda foi criado no auth
-    // Você pode querer deletar o usuário do auth aqui se necessário
-    return { data: null, error: profileError };
-  }
-
-  return { data: { user: authData.user, profile }, error: null };
 }
 
 /**
  * Faz login do usuário
  */
 export async function signIn(email: string, password: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  // Verificar se as variáveis de ambiente estão configuradas
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return { 
+      data: null, 
+      error: new Error('Supabase não está configurado. Verifique as variáveis de ambiente NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY no Vercel.') 
+    };
+  }
 
-  return { data, error };
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    return { data, error };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido ao fazer login';
+    return { 
+      data: null, 
+      error: new Error(`Erro de conexão: ${errorMessage}. Verifique se as variáveis de ambiente do Supabase estão configuradas corretamente no Vercel.`) 
+    };
+  }
 }
 
 /**
