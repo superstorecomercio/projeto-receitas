@@ -16,12 +16,19 @@ export async function getAllRecipes() {
     .select('*')
     .order('created_at', { ascending: false });
 
-  if (recipesError || !recipes) {
+  if (recipesError) {
     return { data: null, error: recipesError };
   }
 
+  if (!recipes || recipes.length === 0) {
+    return { data: [], error: null };
+  }
+
+  // TypeScript agora sabe que recipes é um array não-vazio
+  const recipesArray: Recipe[] = recipes;
+
   // Buscar IDs únicos de usuários
-  const userIds = [...new Set(recipes.map((r) => r.userid))];
+  const userIds = [...new Set(recipesArray.map((r) => r.userid))];
 
   // Buscar perfis dos usuários
   const { data: profiles, error: profilesError } = await supabaseServer
@@ -30,14 +37,14 @@ export async function getAllRecipes() {
     .in('id', userIds);
 
   if (profilesError) {
-    return { data: recipes, error: null }; // Retorna receitas mesmo sem perfis
+    return { data: recipesArray, error: null }; // Retorna receitas mesmo sem perfis
   }
 
   // Criar mapa de perfis por ID
   const profilesMap = new Map((profiles || []).map((p) => [p.id, p]));
 
   // Combinar receitas com perfis
-  const recipesWithProfiles = recipes.map((recipe) => ({
+  const recipesWithProfiles = recipesArray.map((recipe) => ({
     ...recipe,
     profiles: profilesMap.get(recipe.userid) || null
   }));
