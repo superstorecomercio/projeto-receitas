@@ -44,8 +44,18 @@ export async function getAllRecipes() {
     return { data: recipesArray, error: null }; // Retorna receitas mesmo sem perfis
   }
 
+  // Garantir que profiles seja um array válido e tipado corretamente
+  if (!profiles || !Array.isArray(profiles)) {
+    return { data: recipesArray, error: null };
+  }
+
   // TypeScript agora sabe que profiles é um array de perfis selecionados
-  const profilesArray: ProfileSelect[] = (profiles || []) as ProfileSelect[];
+  const profilesArray: ProfileSelect[] = profiles.map((p: any) => ({
+    id: p.id,
+    username: p.username,
+    fullname: p.fullname,
+    bio: p.bio,
+  }));
 
   // Criar mapa de perfis por ID
   const profilesMap = new Map(profilesArray.map((p) => [p.id, p]));
