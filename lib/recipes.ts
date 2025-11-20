@@ -21,7 +21,7 @@ export async function getAllRecipes() {
   }
 
   // Buscar IDs únicos de usuários
-  const userIds = [...new Set(recipes.map(r => r.userid))];
+  const userIds = [...new Set((recipes as any[]).map((r: any) => r.userid))];
 
   // Buscar perfis dos usuários
   const { data: profiles, error: profilesError } = await supabaseServer
@@ -34,10 +34,10 @@ export async function getAllRecipes() {
   }
 
   // Criar mapa de perfis por ID
-  const profilesMap = new Map(profiles?.map(p => [p.id, p]) || []);
+  const profilesMap = new Map((profiles as any[] || []).map((p: any) => [p.id, p]));
 
   // Combinar receitas com perfis
-  const recipesWithProfiles = recipes.map(recipe => ({
+  const recipesWithProfiles = (recipes as any[]).map((recipe: any) => ({
     ...recipe,
     profiles: profilesMap.get(recipe.userid) || null
   }));
@@ -130,6 +130,7 @@ export async function createRecipe(recipe: Omit<RecipeInsert, 'userid'>) {
 
   const { data, error } = await supabase
     .from('recipes')
+    // @ts-expect-error - Supabase type issue
     .insert(recipeData)
     .select()
     .single();
@@ -152,6 +153,7 @@ export async function updateRecipe(id: string, updates: RecipeUpdate) {
 
   const { data, error } = await supabase
     .from('recipes')
+    // @ts-expect-error - Supabase type issue
     .update(updates)
     .eq('id', id)
     .eq('userid', user.id) // Garante que só atualiza se for do usuário

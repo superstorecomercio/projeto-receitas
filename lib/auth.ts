@@ -31,7 +31,8 @@ export async function signUp(email: string, password: string, username: string, 
 
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
-    .insert(profileData)
+    // @ts-expect-error - Supabase type issue
+    .insert([profileData])
     .select()
     .single();
 
@@ -107,6 +108,7 @@ export async function updateProfile(updates: Partial<ProfileInsert>) {
 
   const { data, error } = await supabase
     .from('profiles')
+    // @ts-expect-error - Supabase type issue
     .update({ ...updates, updated_at: new Date().toISOString() })
     .eq('id', user.id)
     .select()

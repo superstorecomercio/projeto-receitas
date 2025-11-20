@@ -85,10 +85,9 @@ function EditRecipeForm() {
         return;
       }
 
-      if (data?.id) {
-        router.push(`/recipes/${recipeId}`);
-        router.refresh();
-      }
+      // Redirecionar após sucesso
+      router.push(`/recipes/${recipeId}`);
+      router.refresh();
     } catch (err: any) {
       setError(err.message || "Erro inesperado ao atualizar receita");
       setSaving(false);
