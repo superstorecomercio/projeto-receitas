@@ -65,8 +65,9 @@ export default function ResetPasswordPage() {
       setTimeout(() => {
         router.push("/login");
       }, 2000);
-    } catch (err: any) {
-      setError(err.message || "Erro inesperado ao redefinir senha");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado ao redefinir senha";
+      setError(errorMessage);
       setLoading(false);
     }
   };

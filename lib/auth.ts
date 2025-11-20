@@ -80,7 +80,7 @@ export async function getCurrentUser() {
 /**
  * Obtém o profile do usuário atual
  */
-export async function getCurrentProfile(): Promise<{ profile: Profile | null; error: any }> {
+export async function getCurrentProfile(): Promise<{ profile: Profile | null; error: Error | null }> {
   const { user, error: userError } = await getCurrentUser();
 
   if (userError || !user) {

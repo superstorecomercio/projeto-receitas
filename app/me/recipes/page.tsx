@@ -14,7 +14,7 @@ function MyRecipesContent() {
   const { user } = useAuth();
   const [recipes, setRecipes] = useState<Recipe[] | null>(null);
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[] | null>(null);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState("Todas");
@@ -241,7 +241,7 @@ function MyRecipesContent() {
                         <p className="text-xs text-gray-500">
                           Criado por{" "}
                           <span className="font-medium text-gray-700">
-                            {(recipe as any).profiles?.fullname || "Anônimo"}
+                            {(recipe as Recipe & { profiles?: { fullname?: string | null } }).profiles?.fullname || "Anônimo"}
                           </span>
                         </p>
                       </div>

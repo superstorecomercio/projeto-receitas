@@ -27,8 +27,9 @@ export default function ForgotPasswordPage() {
 
       setSuccess(true);
       setLoading(false);
-    } catch (err: any) {
-      setError(err.message || "Erro inesperado ao enviar email");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado ao enviar email";
+      setError(errorMessage);
       setLoading(false);
     }
   };

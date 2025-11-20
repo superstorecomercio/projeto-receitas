@@ -69,9 +69,10 @@ export function useAuth() {
       } else {
         setUser(user);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Ignorar erros de sessão ausente
-      if (error?.message?.includes('session') || error?.message?.includes('Auth session missing')) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes('session') || errorMessage.includes('Auth session missing')) {
         setUser(null);
       } else {
         console.error('Erro inesperado ao verificar usuário:', error);

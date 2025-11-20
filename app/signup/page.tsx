@@ -42,8 +42,9 @@ export default function SignupPage() {
           router.refresh();
         }, 2000);
       }
-    } catch (err: any) {
-      setError(err.message || "Erro inesperado ao criar conta");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado ao criar conta";
+      setError(errorMessage);
       setLoading(false);
     }
   };

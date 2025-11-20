@@ -55,8 +55,9 @@ function NewRecipeForm() {
         router.push(`/recipes/${createdRecipe.id}`);
         router.refresh();
       }
-    } catch (err: any) {
-      setError(err.message || "Erro inesperado ao criar receita");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado ao criar receita";
+      setError(errorMessage);
       setLoading(false);
     }
   };

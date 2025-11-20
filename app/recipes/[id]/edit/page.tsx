@@ -88,8 +88,9 @@ function EditRecipeForm() {
       // Redirecionar após sucesso
       router.push(`/recipes/${recipeId}`);
       router.refresh();
-    } catch (err: any) {
-      setError(err.message || "Erro inesperado ao atualizar receita");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado ao atualizar receita";
+      setError(errorMessage);
       setSaving(false);
     }
   };

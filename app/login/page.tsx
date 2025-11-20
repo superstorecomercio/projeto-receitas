@@ -30,8 +30,9 @@ export default function LoginPage() {
         router.push("/me/recipes");
         router.refresh();
       }
-    } catch (err: any) {
-      setError(err.message || "Erro inesperado ao fazer login");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado ao fazer login";
+      setError(errorMessage);
       setLoading(false);
     }
   };

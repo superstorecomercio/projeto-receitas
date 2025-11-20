@@ -74,8 +74,9 @@ function ProfileContent() {
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-    } catch (err: any) {
-      setError(err.message || "Erro inesperado ao atualizar perfil");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado ao atualizar perfil";
+      setError(errorMessage);
       setSaving(false);
     }
   };
