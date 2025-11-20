@@ -32,6 +32,7 @@ export default function LoginPage() {
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Erro inesperado ao fazer login";
+      console.error("Erro de login:", err);
       setError(errorMessage);
       setLoading(false);
     }

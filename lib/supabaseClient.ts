@@ -9,7 +9,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
   const errorMessage = 'Missing Supabase environment variables. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your Vercel project settings.';
   
   if (typeof window !== 'undefined') {
-    console.error(errorMessage);
+    console.error('🔴 SUPABASE CONFIG ERROR:', errorMessage);
+    console.error('URL configurada:', !!supabaseUrl);
+    console.error('KEY configurada:', !!supabaseAnonKey);
   } else {
     console.error(errorMessage);
   }
@@ -18,6 +20,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
   if (process.env.NODE_ENV === 'production' && (!supabaseUrl || !supabaseAnonKey)) {
     throw new Error(errorMessage);
   }
+} else if (typeof window !== 'undefined') {
+  console.log('✅ Supabase configurado:', {
+    url: supabaseUrl?.substring(0, 30) + '...',
+    keyConfigured: !!supabaseAnonKey,
+  });
 }
 
 // Validar formato da URL

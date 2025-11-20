@@ -44,6 +44,7 @@ export default function SignupPage() {
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Erro inesperado ao criar conta";
+      console.error("Erro de signup:", err);
       setError(errorMessage);
       setLoading(false);
     }
