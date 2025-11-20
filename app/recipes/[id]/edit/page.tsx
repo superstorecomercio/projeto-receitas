@@ -50,13 +50,14 @@ function EditRecipeForm() {
         return;
       }
 
-      setRecipe(data as Recipe);
-      setTitle(data.title);
-      setIngredients(data.ingredients || "");
-      setInstructions(data.instructions || "");
-      setCookingTime(data.cooking_time);
-      setDifficulty(data.difficulty);
-      setCategory(data.category);
+      const recipeData = data as Recipe;
+      setRecipe(recipeData);
+      setTitle(recipeData.title);
+      setIngredients(recipeData.ingredients || "");
+      setInstructions(recipeData.instructions || "");
+      setCookingTime(recipeData.cooking_time);
+      setDifficulty(recipeData.difficulty);
+      setCategory(recipeData.category);
       setLoading(false);
     };
 
