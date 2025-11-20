@@ -5,6 +5,10 @@ import type { Database } from '@/types/database';
 type Recipe = Database['public']['Tables']['recipes']['Row'];
 type RecipeInsert = Database['public']['Tables']['recipes']['Insert'];
 type RecipeUpdate = Database['public']['Tables']['recipes']['Update'];
+type Profile = Database['public']['Tables']['profiles']['Row'];
+
+// Tipo para perfil selecionado (apenas campos específicos)
+type ProfileSelect = Pick<Profile, 'id' | 'username' | 'fullname' | 'bio'>;
 
 /**
  * Busca todas as receitas (público) - usa cliente do servidor
@@ -40,8 +44,11 @@ export async function getAllRecipes() {
     return { data: recipesArray, error: null }; // Retorna receitas mesmo sem perfis
   }
 
+  // TypeScript agora sabe que profiles é um array de perfis selecionados
+  const profilesArray: ProfileSelect[] = (profiles || []) as ProfileSelect[];
+
   // Criar mapa de perfis por ID
-  const profilesMap = new Map((profiles || []).map((p) => [p.id, p]));
+  const profilesMap = new Map(profilesArray.map((p) => [p.id, p]));
 
   // Combinar receitas com perfis
   const recipesWithProfiles = recipesArray.map((recipe) => ({

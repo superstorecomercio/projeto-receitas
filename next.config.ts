@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
     // Não falhar no build se houver erros de tipo (mas avisar)
     ignoreBuildErrors: false,
   },
+  
+  // Configuração do Turbopack para evitar aviso de múltiplos lockfiles
+  turbopack: {
+    root: process.cwd(),
+  },
 };
 
 export default nextConfig;
